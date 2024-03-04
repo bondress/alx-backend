@@ -48,19 +48,19 @@ class Server:
         assert 0 <= index < len(self.indexed_dataset())
         assert isinstance(page_size, int) and page_size > 0
 
-        indexed_data = []
+        data = []
         next_index = index + page_size
 
         for value in range(index, next_index):
             if self.indexed_dataset().get(value):
-                indexed_data.append(self.indexed_dataset()[value])
+                data.append(self.indexed_dataset()[value])
             else:
                 value += 1
                 next_index += 1
 
         return {
             'index': index,
-            'data': indexed_data,
+            'data': data,
             'page_size': page_size,
             'next_index': next_index
         }
