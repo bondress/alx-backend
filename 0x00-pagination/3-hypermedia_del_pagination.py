@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """
 Deletion-resilient hypermedia pagination
+Task 3
 """
 
 import csv
 import math
-from typing import List
+from typing import List, Dict
 
 
 class Server:
@@ -39,8 +40,10 @@ class Server:
             }
         return self.__indexed_dataset
 
-    def get_hyper_index(self, index: int = None, page_size: int = 10) -> Dict:
+    def get_hyper_index(self, index: int = None,
+                        page_size: int = 10) -> Dict:
         """return all data"""
+
         if index is None:
             index = 0
 
