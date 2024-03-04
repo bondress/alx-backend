@@ -52,16 +52,16 @@ class Server:
                 data - dataset page
                 next_page - number of next page if there is one
                 prev_page - number of previous page if there is one
-                sum_pages - total number of pages """
+                total_pages - total number of pages """
         page_data = self.get_page(page, page_size)
         total_data = len(self.dataset())
-        sum_pages = ceil(total_data / page_size)
+        total_pages = ceil(total_data / page_size)
 
         return {
             "page_size": len(page_data),
             "page": page,
             "data": page_data,
-            "next_page": page + 1 if page < sum_pages else None,
+            "next_page": page + 1 if page < total_pages else None,
             "prev_page": page - 1 if page != 1 else None,
-            "sum_pages": sum_pages
+            "total_pages": total_pages
         }
