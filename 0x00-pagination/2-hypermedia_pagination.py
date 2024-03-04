@@ -1,32 +1,14 @@
 #!/usr/bin/env python3
-"""Continue code from previous python task.
-
-Implement a get_hyper method that takes the same arguments
-(and defaults) as get_page and returns a dictionary containing
-the following key-value pairs:
-
-page_size: the length of the returned dataset page
-page: the current page number
-data: the dataset page (equivalent to return from previous task)
-next_page: number of the next page, None if no next page
-prev_page: number of the previous page, None if no previous page
-total_pages: the total number of pages in the dataset as an integer
-Make sure to reuse get_page in your implementation.
+""" Description: Implement a get_hyper method that takes the same arguments
+                 (and defaults) as get_page and returns a dictionary containing
+                 the following key-value pairs
 """
 
-
-from typing import Tuple, List
 import csv
-import math
+from math import ceil
+from typing import List
 
-
-def index_range(page: int, page_size: int) -> Tuple[int, int]:
-    """
-    start index and an end index corresponding to the range of
-    indexes to return in a list for those particular pagination
-    parameters.
-    """
-    return ((page-1) * page_size, page_size * page)
+index_range = __import__("0-simple_helper_function").index_range
 
 
 class Server:
@@ -35,6 +17,7 @@ class Server:
     DATA_FILE = "Popular_Baby_Names.csv"
 
     def __init__(self):
+        """ Initialize instance. """
         self.__dataset = None
 
     def dataset(self) -> List[List]:
@@ -49,43 +32,36 @@ class Server:
         return self.__dataset
 
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
-        """return the appropriate page of the dataset"""
-        assert type(page) is int and page > 0
-        assert type(page_size) is int and page_size > 0
+        """ Return page of dataset. """
+        assert isinstance(page, int) and isinstance(page_size, int)
+        assert page > 0 and page_size > 0
 
-        raw_data = self.dataset()
+        indices = index_range(page, page_size)
+        start = indices[0]
+        end = indices[1]
 
         try:
-            start, end = index_range(page, page_size)
-            return raw_data[start:end]
+            return self.dataset()[start:end]
         except IndexError:
             return []
 
     def get_hyper(self, page: int = 1, page_size: int = 10) -> dict:
-        """returns a dictionary containing the following key-value pairs
-        """
-        assert type(page) is int and page > 0
-        assert type(page_size) is int and page_size > 0
+        """ Return dict of pagination using the following key/value pairs:
+                page_size - length of dataset page
+                page - current page number
+                data - dataset page
+                next_page - number of next page if there is one
+                prev_page - number of previous page if there is one
+                sum_pages - total number of pages """
+        page_data = self.get_page(page, page_size)
+        total_data = len(self.dataset())
+        sum_pages = ceil(total_data / page_size)
 
-        data = self.get_page(page, page_size)
-        sum_pages = math.ceil(len(self.dataset()) / page_size)
-
-        start, end = index_range(page, page_size)
-
-        if (page < sum_pages):
-            next_page = page+1
-        else:
-            next_page = None
-
-        if (page == 1):
-            prev_page = None
-        else:
-            prev_page = page - 1
-
-        return {'page_size': len(data),
-                'page': page,
-                'data': data,
-                'next_page': next_page,
-                'prev_page': prev_page,
-                'sum_pages': sum_pages
-                }
+        return {
+            "page_size": len(page_data),
+            "page": page,
+            "data": page_data,
+            "next_page": page + 1 if page < sum_pages else None,
+            "prev_page": page - 1 if page != 1 else None,
+            "sum_pages": sum_pages
+        }
