@@ -15,6 +15,7 @@ class Server:
     DATA_FILE = "Popular_Baby_Names.csv"
 
     def __init__(self):
+        """Initialize instance."""
         self.__dataset = None
         self.__indexed_dataset = None
 
@@ -43,7 +44,6 @@ class Server:
     def get_hyper_index(self, index: int = None,
                         page_size: int = 10) -> Dict:
         """return all data"""
-
         if index is None:
             index = 0
 
