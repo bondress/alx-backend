@@ -41,9 +41,14 @@ class Server:
             }
         return self.__indexed_dataset
 
-    def get_hyper_index(self, index: int = None,
-                        page_size: int = 10) -> Dict:
-        """return dict of pagination data"""
+    def get_hyper_index(self, index: int = None, page_size: int = 10) -> Dict:
+        """return dict of pagination data with the
+        following key/value pairs:
+        index - the start index of the page
+        next_index - the start index of the next page
+        page_size
+        page_size - the number of items on the page
+        data - the data in the page itself"""
         assert 0 <= index < len(self.dataset())
 
         indexed_dataset = self.indexed_dataset()
